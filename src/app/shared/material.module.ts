@@ -20,6 +20,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRippleModule } from '@angular/material/core';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const materialModules = [
   MatButtonModule,
@@ -42,7 +44,9 @@ const materialModules = [
   MatPaginatorModule,
   MatProgressBarModule,
   MatSlideToggleModule,
-  MatRippleModule
+  MatRippleModule,
+  MatButtonToggleModule,
+  MatAutocompleteModule
 ];
 
 @NgModule({

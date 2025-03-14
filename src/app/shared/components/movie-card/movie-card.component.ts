@@ -124,6 +124,7 @@ import { FavoritesService } from '../../../core/services/favorites.service';
 })
 export class MovieCardComponent implements OnInit {
   @Input() movie!: Movie;
+  @Input() showRemoveButton: boolean = false;
   
   private readonly favoritesService = inject(FavoritesService);
   
