@@ -12,81 +12,8 @@ import { Movie } from '../../../../core/interfaces/movie';
   selector: 'app-movie-list',
   standalone: true,
   imports: [CommonModule, RouterModule, MaterialModule, MovieCardComponent],
-  template: `
-    <div class="container">
-      <h1 class="page-title">Explorar Películas</h1>
-      
-      <div *ngIf="isLoading" class="loading-container">
-        <mat-spinner></mat-spinner>
-      </div>
-      
-      <div *ngIf="!isLoading">
-        <mat-tab-group animationDuration="200ms" color="accent">
-          <mat-tab label="Populares">
-            <div class="movie-grid">
-              <app-movie-card 
-                *ngFor="let movie of popularMovies" 
-                [movie]="movie"
-              ></app-movie-card>
-            </div>
-          </mat-tab>
-          
-          <mat-tab label="En Cartelera">
-            <div class="movie-grid">
-              <app-movie-card 
-                *ngFor="let movie of nowPlayingMovies" 
-                [movie]="movie"
-              ></app-movie-card>
-            </div>
-          </mat-tab>
-          
-          <mat-tab label="Mejor Valoradas">
-            <div class="movie-grid">
-              <app-movie-card 
-                *ngFor="let movie of topRatedMovies" 
-                [movie]="movie"
-              ></app-movie-card>
-            </div>
-          </mat-tab>
-        </mat-tab-group>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px 16px;
-    }
-    
-    .page-title {
-      font-size: 2rem;
-      font-weight: 500;
-      margin-bottom: 24px;
-      color: #3f51b5;
-    }
-    
-    .loading-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 400px;
-    }
-    
-    .movie-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 24px;
-      padding: 24px 0;
-    }
-    
-    @media (max-width: 599px) {
-      .movie-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 16px;
-      }
-    }
-  `]
+  templateUrl: './movies-list.component.html',
+  styleUrls: ['./movies-list.component.scss']
 })
 export class MovieListComponent implements OnInit {
   private readonly movieFactoryService = inject(MovieFactoryService);

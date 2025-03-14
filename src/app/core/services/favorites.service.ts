@@ -1,4 +1,3 @@
-// src/app/core/services/favorites.service.ts
 import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, addDoc, deleteDoc, query, where, getDocs, doc } from '@angular/fire/firestore';
 import { Observable, catchError, from, map, of, switchMap } from 'rxjs';
