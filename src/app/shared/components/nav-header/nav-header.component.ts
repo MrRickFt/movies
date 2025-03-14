@@ -1,12 +1,10 @@
-// src/app/shared/components/nav-header/nav-header.component.ts
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
-import { Router } from '@angular/router';
-import { MaterialModule } from '../../material.module';
 import { AuthService } from '../../../core/services/auth.service';
+import { SearchStrategyContext } from '../../../core/strategies/search-strategy';
+import { MaterialModule } from '../../material.module';
 
 @Component({
   selector: 'app-nav-header',
@@ -177,13 +175,13 @@ import { AuthService } from '../../../core/services/auth.service';
 export class NavHeaderComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly searchContext = inject(SearchStrategyContex);
+  private readonly searchContext = inject(SearchStrategyContext);
   
   user$ = this.authService.user$;
   searchQuery = '';
   searchType = 'title';
-  selectedGenreId = 28; // Action genre by default
-  isHandset = false; // Idealmente esto se determinaría con un servicio de BreakpointObserver
+  selectedGenreId = 28;
+  isHandset = false;
 
   logout() {
     this.authService.signOut().subscribe({

@@ -5,7 +5,6 @@ import { MaterialModule } from '../../../../shared/material.module';
 import { AuthService } from '../../../../core/services/auth.service';
 
 
-
 @Component({
   selector: 'app-login',
   standalone: true,

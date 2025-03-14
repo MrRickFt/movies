@@ -1,11 +1,11 @@
-// src/app/shared/components/movie-card/movie-card.component.ts
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Movie } from '../../../core/interfaces/movie';
-import { FavoritesService } from '../../../core/services/favorites.service';
+
 import { MaterialModule } from '../../material.module';
 import { Observable } from 'rxjs';
+import { Movie } from '../../../core/interfaces/movie';
+import { FavoritesService } from '../../../core/services/favorites.service';
 
 @Component({
   selector: 'app-movie-card',

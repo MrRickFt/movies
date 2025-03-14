@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { AuthService } from './core/services/auth.service';
+
 
 @Component({
   selector: 'app-root',

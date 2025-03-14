@@ -1,14 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+
 import { forkJoin } from 'rxjs';
 import { MaterialModule } from '../../../../shared/material.module';
-
 import { MovieCardComponent } from '../../../../shared/components/movie-card/movie-card.component';
-
-import { Movie } from '../../../../core/interfaces/movie';
 import { MovieFactoryService } from '../../../../core/factories/movie-factory';
-
+import { Movie } from '../../../../core/interfaces/movie';
 
 @Component({
   selector: 'app-movie-list',
