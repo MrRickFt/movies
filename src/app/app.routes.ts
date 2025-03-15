@@ -10,9 +10,9 @@ import { NotFoundComponent } from './core/components/not-found/not-found.compone
 export const routes: Routes = [
   { path: '', redirectTo: '/movies', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'movies', component: MovieListComponent },
+  { path: 'movies', component: MovieListComponent, canActivate: [authGuard] },
   { path: 'movies/:id', component: MovieDetailsComponent },
-  { path: 'search', component: SearchResultsComponent },
+  { path: 'search', component: SearchResultsComponent, canActivate: [authGuard] },
   { path: 'favorites', component: FavoritesComponent, canActivate: [authGuard] },
   { path: '**', component: NotFoundComponent }
 ];
