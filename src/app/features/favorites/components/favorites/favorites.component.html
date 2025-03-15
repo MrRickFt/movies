@@ -1,0 +1,23 @@
+<div class="container">
+    <h1 class="page-title">Mis películas favoritas</h1>
+    
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+    
+    <div *ngIf="!isLoading && displayedMovies.length === 0" class="no-favorites">
+      <mat-icon>mood_bad</mat-icon>
+      <p>No tienes películas favoritas</p>
+      <button mat-raised-button color="primary" routerLink="/movies">
+        Explorar películas
+      </button>
+    </div>
+    
+    <div *ngIf="!isLoading && displayedMovies.length > 0" class="favorites-grid">
+      <app-movie-card
+         *ngFor="let movie of displayedMovies"
+         [movie]="movie"
+        [showRemoveButton]="true"
+      ></app-movie-card>
+    </div>
+  </div>

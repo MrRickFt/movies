@@ -1,7 +1,6 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
 import { MaterialModule } from '../../material.module';
 import { Observable } from 'rxjs';
 import { Movie } from '../../../core/interfaces/movie';
@@ -20,7 +19,13 @@ export class MovieCardComponent implements OnInit {
   
   private readonly favoritesService = inject(FavoritesService);
   
+  // Mantenemos el Observable para compatibilidad con el código existente
   isFavorite$!: Observable<boolean>;
+  
+  // Añadimos una signal computada para el estado de favorito
+  isFavoriteSignal = computed(() => {
+    return this.favoritesService.favorites().has(this.movie?.id);
+  });
   
   ngOnInit() {
     this.isFavorite$ = this.favoritesService.isFavorite(this.movie.id);
@@ -35,12 +40,12 @@ export class MovieCardComponent implements OnInit {
   toggleFavorite(event: Event) {
     event.stopPropagation();
     
-    this.isFavorite$.subscribe(isFavorite => {
-      if (isFavorite) {
-        this.favoritesService.removeFromFavorites(this.movie.id).subscribe();
-      } else {
-        this.favoritesService.addToFavorites(this.movie).subscribe();
-      }
-    });
+    // Usamos la signal para determinar el estado actual
+    if (this.isFavoriteSignal()) {
+      this.favoritesService.removeFromFavorites(this.movie.id).subscribe();
+    } else {
+      this.favoritesService.addToFavorites(this.movie).subscribe();
+    }
+    // No necesitamos hacer nada más, la UI se actualizará automáticamente
   }
 }
