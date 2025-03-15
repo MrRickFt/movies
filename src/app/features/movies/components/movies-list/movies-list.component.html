@@ -1,0 +1,38 @@
+<div class="container">
+    <h1 class="page-title">Explorar Películas</h1>
+    
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+    
+    <div *ngIf="!isLoading">
+      <mat-tab-group animationDuration="200ms" color="accent">
+        <mat-tab label="Populares">
+          <div class="movie-grid">
+            <app-movie-card 
+              *ngFor="let movie of popularMovies" 
+              [movie]="movie"
+            ></app-movie-card>
+          </div>
+        </mat-tab>
+        
+        <mat-tab label="En Cartelera">
+          <div class="movie-grid">
+            <app-movie-card 
+              *ngFor="let movie of nowPlayingMovies" 
+              [movie]="movie"
+            ></app-movie-card>
+          </div>
+        </mat-tab>
+        
+        <mat-tab label="Mejor Valoradas">
+          <div class="movie-grid">
+            <app-movie-card 
+              *ngFor="let movie of topRatedMovies" 
+              [movie]="movie"
+            ></app-movie-card>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>

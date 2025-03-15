@@ -1,0 +1,55 @@
+
+<mat-toolbar color="primary" class="navbar">
+    <div class="navbar-container">
+      <a routerLink="/movies" class="logo">
+        <mat-icon>movie</mat-icon>
+        <span class="app-name">MovieApp</span>
+      </a>
+      
+      <div class="search-bar">
+        <mat-form-field appearance="outline" class="search-input">
+          <mat-label>Buscar películas...</mat-label>
+          <input matInput #searchInput (keyup.enter)="searchMovies(searchInput.value)">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+      
+      <div class="nav-links">
+        <a mat-button routerLink="/movies" routerLinkActive="active-link">
+          <mat-icon>home</mat-icon>
+          <span class="nav-text">Inicio</span>
+        </a>
+        <a mat-button routerLink="/favorites" routerLinkActive="active-link" *ngIf="user$ | async">
+          <mat-icon>favorite</mat-icon>
+          <span class="nav-text">Favoritos</span>
+        </a>
+      </div>
+      
+      <div class="spacer"></div>
+      
+      <ng-container *ngIf="user$ | async as user; else loginButton">
+        <button mat-button [matMenuTriggerFor]="userMenu" class="user-profile">
+          <img [src]="user.photoURL || 'assets/images/avatar.png'" alt="Avatar" class="avatar">
+          <span class="username">{{ user.displayName }}</span>
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item disabled>
+            <mat-icon>person</mat-icon>
+            <span>{{ user.email }}</span>
+          </button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Cerrar sesión</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+      
+      <ng-template #loginButton>
+        <a mat-raised-button color="accent" routerLink="/login">
+          <mat-icon>login</mat-icon>
+          <span class="nav-text">Iniciar sesión</span>
+        </a>
+      </ng-template>
+    </div>
+  </mat-toolbar>
