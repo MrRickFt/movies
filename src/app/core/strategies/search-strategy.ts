@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { SearchStrategy } from '../interfaces/search-strategy';
 import { MovieService } from '../services/movies.service';
 import { Movie } from '../interfaces/movie';
@@ -33,7 +33,9 @@ export class TitleSearchStrategy implements SearchStrategy {
     constructor(private readonly movieService: MovieService) { }
 
     search(query: string): Observable<Movie[]> {
-        return this.movieService.searchMoviesByTitle(query);
+        return this.movieService.searchMoviesByTitle(query).pipe(
+            map((response) => response.results)
+        );
     }
 }
 

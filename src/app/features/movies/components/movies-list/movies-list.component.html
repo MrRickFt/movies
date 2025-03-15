@@ -1,38 +1,56 @@
 <div class="container">
-    <h1 class="page-title">Explorar Películas</h1>
-    
-    <div *ngIf="isLoading" class="loading-container">
-      <mat-spinner></mat-spinner>
-    </div>
-    
-    <div *ngIf="!isLoading">
-      <mat-tab-group animationDuration="200ms" color="accent">
-        <mat-tab label="Populares">
-          <div class="movie-grid">
-            <app-movie-card 
-              *ngFor="let movie of popularMovies" 
-              [movie]="movie"
-            ></app-movie-card>
-          </div>
-        </mat-tab>
-        
-        <mat-tab label="En Cartelera">
-          <div class="movie-grid">
-            <app-movie-card 
-              *ngFor="let movie of nowPlayingMovies" 
-              [movie]="movie"
-            ></app-movie-card>
-          </div>
-        </mat-tab>
-        
-        <mat-tab label="Mejor Valoradas">
-          <div class="movie-grid">
-            <app-movie-card 
-              *ngFor="let movie of topRatedMovies" 
-              [movie]="movie"
-            ></app-movie-card>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
+  <h1 class="page-title">Explorar Películas</h1>
+  
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
   </div>
+  
+  <div *ngIf="!isLoading">
+    <mat-tab-group animationDuration="200ms" color="accent">
+      <mat-tab label="Populares">
+        <div class="movie-grid">
+          <app-movie-card 
+            *ngFor="let movie of popularMovies" 
+            [movie]="movie"
+          ></app-movie-card>
+        </div>
+        <mat-paginator 
+          [length]="popularTotalPages * 20"
+          [pageSize]="20"
+          [pageIndex]="popularCurrentPage - 1"
+          (page)="onPopularPageChange($event)">
+        </mat-paginator>
+      </mat-tab>
+      
+      <mat-tab label="En Cartelera">
+        <div class="movie-grid">
+          <app-movie-card 
+            *ngFor="let movie of nowPlayingMovies" 
+            [movie]="movie"
+          ></app-movie-card>
+        </div>
+        <mat-paginator 
+          [length]="nowPlayingTotalPages * 20"
+          [pageSize]="20"
+          [pageIndex]="nowPlayingCurrentPage - 1"
+          (page)="onNowPlayingPageChange($event)">
+        </mat-paginator>
+      </mat-tab>
+      
+      <mat-tab label="Mejor Valoradas">
+        <div class="movie-grid">
+          <app-movie-card 
+            *ngFor="let movie of topRatedMovies" 
+            [movie]="movie"
+          ></app-movie-card>
+        </div>
+        <mat-paginator 
+          [length]="topRatedTotalPages * 20"
+          [pageSize]="20"
+          [pageIndex]="topRatedCurrentPage - 1"
+          (page)="onTopRatedPageChange($event)">
+        </mat-paginator>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

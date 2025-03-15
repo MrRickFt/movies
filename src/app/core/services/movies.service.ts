@@ -15,37 +15,49 @@ export class MovieService {
 
   constructor() {}
 
-  getPopularMovies(): Observable<Movie[]> {
-    return this.http.get<{results: Movie[]}>(`${this.apiUrl}/movie/popular?api_key=${this.apiKey}&language=es-ES`)
-      .pipe(
-        map(response => response.results),
-        catchError(error => {
-          console.error('Error fetching popular movies', error);
-          return of([]);
-        })
-      );
+  getPopularMovies(page: number = 1): Observable<{results: Movie[], totalPages: number}> {
+    return this.http.get<{results: Movie[], total_pages: number, total_results: number}>(
+      `${this.apiUrl}/movie/popular?api_key=${this.apiKey}&language=es-ES&page=${page}`
+    ).pipe(
+      map(response => ({
+        results: response.results,
+        totalPages: response.total_pages
+      })),
+      catchError(error => {
+        console.error('Error fetching popular movies', error);
+        return of({results: [], totalPages: 0});
+      })
+    );
   }
-
-  getNowPlayingMovies(): Observable<Movie[]> {
-    return this.http.get<{results: Movie[]}>(`${this.apiUrl}/movie/now_playing?api_key=${this.apiKey}&language=es-ES`)
-      .pipe(
-        map(response => response.results),
-        catchError(error => {
-          console.error('Error fetching now playing movies', error);
-          return of([]);
-        })
-      );
+  
+   getNowPlayingMovies(page: number = 1): Observable<{results: Movie[], totalPages: number}> {
+    return this.http.get<{results: Movie[], total_pages: number, total_results: number}>(
+      `${this.apiUrl}/movie/now_playing?api_key=${this.apiKey}&language=es-ES&page=${page}`
+    ).pipe(
+      map(response => ({
+        results: response.results,
+        totalPages: response.total_pages
+      })),
+      catchError(error => {
+        console.error('Error fetching now playing movies', error);
+        return of({results: [], totalPages: 0});
+      })
+    );
   }
-
-  getTopRatedMovies(): Observable<Movie[]> {
-    return this.http.get<{results: Movie[]}>(`${this.apiUrl}/movie/top_rated?api_key=${this.apiKey}&language=es-ES`)
-      .pipe(
-        map(response => response.results),
-        catchError(error => {
-          console.error('Error fetching top rated movies', error);
-          return of([]);
-        })
-      );
+  
+  getTopRatedMovies(page: number = 1): Observable<{results: Movie[], totalPages: number}> {
+    return this.http.get<{results: Movie[], total_pages: number, total_results: number}>(
+      `${this.apiUrl}/movie/top_rated?api_key=${this.apiKey}&language=es-ES&page=${page}`
+    ).pipe(
+      map(response => ({
+        results: response.results,
+        totalPages: response.total_pages
+      })),
+      catchError(error => {
+        console.error('Error fetching top rated movies', error);
+        return of({results: [], totalPages: 0});
+      })
+    );
   }
 
   getMovieDetails(id: number): Observable<MovieDetails | null> {
@@ -58,19 +70,23 @@ export class MovieService {
       );
   }
 
-  searchMoviesByTitle(query: string): Observable<Movie[]> {
+  searchMoviesByTitle(query: string, page: number = 1): Observable<{results: Movie[], totalPages: number}> {
     if (!query.trim()) {
-      return of([]);
+      return of({results: [], totalPages: 0});
     }
     
-    return this.http.get<{results: Movie[]}>(`${this.apiUrl}/search/movie?api_key=${this.apiKey}&language=es-ES&query=${query}`)
-      .pipe(
-        map(response => response.results),
-        catchError(error => {
-          console.error('Error searching movies by title', error);
-          return of([]);
-        })
-      );
+    return this.http.get<{results: Movie[], total_pages: number, total_results: number}>(
+      `${this.apiUrl}/search/movie?api_key=${this.apiKey}&language=es-ES&query=${query}&page=${page}`
+    ).pipe(
+      map(response => ({
+        results: response.results,
+        totalPages: response.total_pages
+      })),
+      catchError(error => {
+        console.error('Error searching movies by title', error);
+        return of({results: [], totalPages: 0});
+      })
+    );
   }
 
   searchMoviesByGenre(genreId: number): Observable<Movie[]> {

@@ -26,24 +26,25 @@ export class MovieFactoryService {
 
 export class PopularMoviesFactory implements MovieFactory {
     constructor(private readonly movieService: MovieService) { }
-
-    getMovies(): Observable<Movie[]> {
-        return this.movieService.getPopularMovies();
+    
+    getMovies(page: number = 1): Observable<{results: Movie[], totalPages: number}> {
+      return this.movieService.getPopularMovies(page);
     }
-}
-
-export class NowPlayingMoviesFactory implements MovieFactory {
+  }
+  
+  // Similarly for NowPlayingMoviesFactory and TopRatedMoviesFactory
+  export class NowPlayingMoviesFactory implements MovieFactory {
     constructor(private readonly movieService: MovieService) { }
-
-    getMovies(): Observable<Movie[]> {
-        return this.movieService.getNowPlayingMovies();
+    
+    getMovies(page: number = 1): Observable<{results: Movie[], totalPages: number}> {
+      return this.movieService.getNowPlayingMovies(page);
     }
-}
-
-export class TopRatedMoviesFactory implements MovieFactory {
+  }
+  
+  export class TopRatedMoviesFactory implements MovieFactory {
     constructor(private readonly movieService: MovieService) { }
-
-    getMovies(): Observable<Movie[]> {
-        return this.movieService.getTopRatedMovies();
+    
+    getMovies(page: number = 1): Observable<{results: Movie[], totalPages: number}> {
+      return this.movieService.getTopRatedMovies(page);
     }
-}
+  }
