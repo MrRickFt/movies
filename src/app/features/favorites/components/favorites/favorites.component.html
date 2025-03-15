@@ -1,23 +1,30 @@
 <div class="container">
-    <h1 class="page-title">Mis películas favoritas</h1>
-    
-    <div *ngIf="isLoading" class="loading-container">
-      <mat-spinner></mat-spinner>
-    </div>
-    
-    <div *ngIf="!isLoading && displayedMovies.length === 0" class="no-favorites">
-      <mat-icon>mood_bad</mat-icon>
-      <p>No tienes películas favoritas</p>
-      <button mat-raised-button color="primary" routerLink="/movies">
-        Explorar películas
-      </button>
-    </div>
-    
-    <div *ngIf="!isLoading && displayedMovies.length > 0" class="favorites-grid">
-      <app-movie-card
-         *ngFor="let movie of displayedMovies"
-         [movie]="movie"
-        [showRemoveButton]="true"
-      ></app-movie-card>
-    </div>
+  <h1 class="title">Mis películas favoritas</h1>
+  
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
   </div>
+  
+  <div *ngIf="!isLoading && totalMovies === 0" class="empty-state">
+    <mat-icon class="empty-icon">mood_bad</mat-icon>
+    <p>No tienes películas favoritas</p>
+    <button mat-raised-button color="primary" routerLink="/movies">Explorar películas</button>
+  </div>
+  
+  <div *ngIf="!isLoading && totalMovies > 0" class="movies-grid">
+    <app-movie-card *ngFor="let movie of displayedMovies" 
+      [movie]="movie">
+    </app-movie-card>
+  </div>
+  
+
+  <mat-paginator *ngIf="!isLoading && totalMovies > 0"
+    [length]="totalMovies"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="currentPage"
+    (page)="onPageChange($event)"
+    aria-label="Seleccionar página">
+  </mat-paginator>
+</div>

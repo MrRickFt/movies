@@ -5,6 +5,7 @@ import { MovieCardComponent } from '../../../../shared/components/movie-card/mov
 import { FavoritesService } from '../../../../core/services/favorites.service';
 import { Movie } from '../../../../core/interfaces/movie';
 import { RouterModule } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-favorites',
@@ -20,13 +21,24 @@ export class FavoritesComponent implements OnInit {
   allMovies: Movie[] = [];
   displayedMovies: Movie[] = [];
   
+  // Pagination properties
+  pageSize = 10;
+  currentPage = 0;
+  totalMovies = 0;
+  pageSizeOptions = [5, 10, 20, 50];
+  
   constructor() {
     effect(() => {
       const favoritesMap = this.favoritesService.favorites();
       if (!this.isLoading && this.allMovies.length > 0) {
-        this.displayedMovies = this.allMovies.filter(movie => 
+        // Apply filter to all movies based on favorites map
+        const filteredMovies = this.allMovies.filter(movie => 
           favoritesMap.has(movie.id)
         );
+        this.totalMovies = filteredMovies.length;
+        
+        // Apply pagination to filtered movies
+        this.updateDisplayedMovies(filteredMovies);
       }
     });
   }
@@ -41,9 +53,15 @@ export class FavoritesComponent implements OnInit {
       next: (favorites) => {
         this.allMovies = favorites;
         const favoritesMap = this.favoritesService.favorites();
-        this.displayedMovies = favorites.filter(movie => 
+        
+        // Apply filter to all movies based on favorites map
+        const filteredMovies = favorites.filter(movie => 
           favoritesMap.has(movie.id)
         );
+        this.totalMovies = filteredMovies.length;
+        
+        // Apply pagination to filtered movies
+        this.updateDisplayedMovies(filteredMovies);
         this.isLoading = false;
       },
       error: (error) => {
@@ -51,5 +69,22 @@ export class FavoritesComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+  
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    
+    const favoritesMap = this.favoritesService.favorites();
+    const filteredMovies = this.allMovies.filter(movie => 
+      favoritesMap.has(movie.id)
+    );
+    
+    this.updateDisplayedMovies(filteredMovies);
+  }
+  
+  private updateDisplayedMovies(filteredMovies: Movie[]) {
+    const startIndex = this.currentPage * this.pageSize;
+    this.displayedMovies = filteredMovies.slice(startIndex, startIndex + this.pageSize);
   }
 }
