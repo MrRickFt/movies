@@ -70,35 +70,18 @@ export class MovieService {
       );
   }
 
-  searchMoviesByTitle(query: string, page: number = 1): Observable<{results: Movie[], totalPages: number}> {
-    if (!query.trim()) {
-      return of({results: [], totalPages: 0});
-    }
-    
-    return this.http.get<{results: Movie[], total_pages: number, total_results: number}>(
-      `${this.apiUrl}/search/movie?api_key=${this.apiKey}&language=es-ES&query=${query}&page=${page}`
-    ).pipe(
-      map(response => ({
-        results: response.results,
-        totalPages: response.total_pages
-      })),
-      catchError(error => {
-        console.error('Error searching movies by title', error);
-        return of({results: [], totalPages: 0});
-      })
+  searchMoviesByTitle(query: string, page: number): Observable<{ results: Movie[], total_results: number }> {
+    return this.http.get<{ results: Movie[], total_results: number }>(
+        `${this.apiUrl}/search/movie?query=${query}&page=${page}&api_key=${this.apiKey}`
     );
-  }
+}
 
-  searchMoviesByGenre(genreId: number): Observable<Movie[]> {
-    return this.http.get<{results: Movie[]}>(`${this.apiUrl}/discover/movie?api_key=${this.apiKey}&language=es-ES&with_genres=${genreId}`)
-      .pipe(
-        map(response => response.results),
-        catchError(error => {
-          console.error('Error searching movies by genre', error);
-          return of([]);
-        })
-      );
-  }
+searchMoviesByGenre(genreId: number, page: number): Observable<{ results: Movie[], total_results: number }> {
+    return this.http.get<{ results: Movie[], total_results: number }>(
+        `${this.apiUrl}/discover/movie?with_genres=${genreId}&page=${page}&api_key=${this.apiKey}`
+    );
+}
+
 
   getGenres(): Observable<{id: number, name: string}[]> {
     return this.http.get<{genres: {id: number, name: string}[]}>(`${this.apiUrl}/genre/movie/list?api_key=${this.apiKey}&language=es-ES`)

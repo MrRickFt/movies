@@ -24,25 +24,36 @@ export class SearchStrategyContext {
         }
     }
 
-    executeSearch(query: string): Observable<Movie[]> {
-        return this.strategy.search(query);
+    executeSearch(query: string, page: number): Observable<{ results: Movie[], total_results: number }> {
+        return this.strategy.search(query, page);
     }
+    
 }
 
 export class TitleSearchStrategy implements SearchStrategy {
     constructor(private readonly movieService: MovieService) { }
 
-    search(query: string): Observable<Movie[]> {
-        return this.movieService.searchMoviesByTitle(query).pipe(
-            map((response) => response.results)
+    search(query: string, page: number): Observable<{ results: Movie[], total_results: number }> {
+        return this.movieService.searchMoviesByTitle(query, page).pipe(
+            map(response => ({
+                results: response.results, 
+                total_results: response.total_results
+            }))
         );
     }
 }
 
+
 export class GenreSearchStrategy implements SearchStrategy {
     constructor(private readonly movieService: MovieService, private readonly genreId: number) { }
 
-    search(_query: string): Observable<Movie[]> {
-        return this.movieService.searchMoviesByGenre(this.genreId);
+    search(_query: string, page: number): Observable<{ results: Movie[], total_results: number }> {
+        return this.movieService.searchMoviesByGenre(this.genreId, page).pipe(
+            map(response => ({
+                results: response.results,
+                total_results: response.total_results
+            }))
+        );
     }
 }
+

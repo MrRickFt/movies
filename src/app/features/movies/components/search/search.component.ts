@@ -1,117 +1,105 @@
-// import { Component, inject } from '@angular/core';
-// import { CommonModule } from '@angular/common';
-// import { FormControl, ReactiveFormsModule } from '@angular/forms';
-// import { Router } from '@angular/router';
-// import { Observable, debounceTime, filter, map, startWith, switchMap } from 'rxjs';
-// import { MaterialModule } from '../../../../shared/material.module';
-// import { MovieService } from '../../../../core/services/movies.service';
+import { Component, OnInit, Injectable, inject } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { PageEvent } from '@angular/material/paginator';
+import { Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 
-// @Component({
-//   selector: 'app-search',
-//   standalone: true,
-//   imports: [CommonModule,
-//             MaterialModule, 
-//             ReactiveFormsModule,
-//             ],
-//   template: `
-//     <div class="search-container">
-//       <div class="search-methods">
-//         <mat-button-toggle-group #group="matButtonToggleGroup" value="title" (change)="searchMethodChanged(group.value)">
-//           <mat-button-toggle value="title">Buscar por título</mat-button-toggle>
-//           <mat-button-toggle value="genre">Buscar por género</mat-button-toggle>
-//         </mat-button-toggle-group>
-//       </div>
-      
-//       <div *ngIf="searchMethod === 'title'" class="search-by-title">
-//         <mat-form-field appearance="outline" class="search-field">
-//           <mat-label>Buscar película</mat-label>
-//           <input matInput [formControl]="searchControl" placeholder="Buscar por título..." autocomplete="off">
-//           <mat-icon matPrefix>search</mat-icon>
-//           <mat-icon *ngIf="searchControl.value" matSuffix (click)="clearSearch()">close</mat-icon>
-//         </mat-form-field>
-        
-//         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="optionSelected($event.option.value)">
-//           <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-//             {{ option }}
-//           </mat-option>
-//         </mat-autocomplete>
-//       </div>
-      
-//       <div *ngIf="searchMethod === 'genre'" class="search-by-genre">
-//         <mat-form-field appearance="outline" class="search-field">
-//           <mat-label>Seleccionar género</mat-label>
-//           <mat-select (selectionChange)="genreSelected($event.value)">
-//             <mat-option *ngFor="let genre of genres$ | async" [value]="genre.id">
-//               {{ genre.name }}
-//             </mat-option>
-//           </mat-select>
-//           <mat-icon matPrefix>category</mat-icon>
-//         </mat-form-field>
-//       </div>
-//     </div>
-//   `,
-//   styles: [`
-//     .search-container {
-//       display: flex;
-//       flex-direction: column;
-//       gap: 16px;
-//       padding: 16px;
-//       background-color: #f5f5f5;
-//       border-radius: 8px;
-//       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-//     }
-    
-//     .search-methods {
-//       display: flex;
-//       justify-content: center;
-//     }
-    
-//     .search-field {
-//       width: 100%;
-//     }
-    
-//     @media (max-width: 599px) {
-//       .search-container {
-//         padding: 12px;
-//       }
-//     }
-//   `]
-// })
-// export class SearchComponent {
-//   private readonly router = inject(Router);
-//   private readonly movieService = inject(MovieService);
+import { MaterialModule } from '../../../../shared/material.module';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Movie } from '../../../../core/interfaces/movie';
+import { SearchStrategyContext } from '../../../../core/strategies/search-strategy';
+import { MovieService } from '../../../../core/services/movies.service';
+
+
+@Component({
+  selector: 'app-search',
+  standalone: true,
+  imports: [CommonModule, RouterModule, MaterialModule, ReactiveFormsModule],
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.scss']
+})
+export class SearchComponent implements OnInit {
+ private readonly searchStrategyContext = inject(SearchStrategyContext);
+ private readonly moviesService = inject(MovieService)
+
+  searchControl = new FormControl('');
+  searchMethod: 'title' | 'genre' = 'title';
+  genres$ = this.moviesService.getGenres();
+  filteredOptions!: Observable<string[]>;
+  movies: Movie[] = [];
+  totalItems = 0;
+  currentPage = 1;
+  pageSize = 20;
+  selectedGenreId?: number;
+
+  constructor(
+  ) {}
+
+  ngOnInit(): void {
+    this.filteredOptions = this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((query: string | null) =>
+        this.searchStrategyContext.executeSearch(query || '', this.currentPage).pipe(
+          map(response => response.results.map(movie => movie.title))
+        )
+      )
+    );
+  }
   
-//   searchControl = new FormControl('');
-//   searchMethod = 'title';
   
-//   filteredOptions: Observable<string[]> = this.searchControl.valueChanges.pipe(
-//     startWith(''),
-//     debounceTime(300),
-//     filter(value => value !== null && value.length > 2),
-//     switchMap(value => this.movieService.searchMovies(value || '').pipe(
-//       map(movies => movies.slice(0, 5).map(movie => movie.title))
-//     ))
-//   );
   
-//   genres$ = this.movieService.getGenres();
-  
-//   searchMethodChanged(method: string) {
-//     this.searchMethod = method;
-//   }
-  
-//   clearSearch() {
-//     this.searchControl.setValue('');
-//   }
-  
-//   optionSelected(movieName: string) {
-//     this.router.navigate(['/search'], {
-//       queryParams: { q: movieName, type: 'title' }
-//     });
-//   }
-  
-//   genreSelected(genreId: number) {
-//     this.router.navigate(['/search'], {
-//       queryParams: { genreId: genreId, type: 'genre' }
-//     });
-//   }
-// }
+
+  searchMethodChanged(method: 'title' | 'genre'): void {
+    this.searchMethod = method;
+    this.movies = [];
+    this.totalItems = 0;
+    this.currentPage = 1;
+    if (method === 'genre') {
+      this.searchControl.setValue('');
+    }
+  }
+
+  genreSelected(genreId: number): void {
+    this.selectedGenreId = genreId;
+    this.currentPage = 1;
+    this.fetchMovies();
+  }
+
+  optionSelected(title: string): void {
+    this.searchControl.setValue(title);
+    this.fetchMovies();
+  }
+
+  clearSearch(): void {
+    this.searchControl.setValue('');
+    this.movies = [];
+    this.totalItems = 0;
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.currentPage = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.fetchMovies();
+  }
+
+  private fetchMovies(): void {
+    if (this.searchMethod === 'title') {
+      this.searchStrategyContext.setStrategy('title');
+      this.searchStrategyContext.executeSearch(this.searchControl.value?? '', this.currentPage)
+        .subscribe((response: { results: Movie[], total_results: number }) => {
+          this.movies = response.results;
+          this.totalItems = response.total_results;
+        });
+    } else if (this.searchMethod === 'genre' && this.selectedGenreId) {
+      this.searchStrategyContext.setStrategy('genre', this.selectedGenreId);
+      this.searchStrategyContext.executeSearch('', this.currentPage)
+        .subscribe((response: { results: Movie[], total_results: number }) => {
+          this.movies = response.results;
+          this.totalItems = response.total_results;
+        });
+    }
+  }
+}
