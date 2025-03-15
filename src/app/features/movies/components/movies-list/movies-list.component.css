@@ -1,4 +1,3 @@
-
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -31,4 +30,22 @@
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 16px;
   }
+}
+
+/* Corrección para evitar el desbordamiento de imágenes */
+app-movie-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+app-movie-card img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 8px;
 }
