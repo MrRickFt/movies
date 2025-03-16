@@ -8,7 +8,7 @@
   font-size: 2rem;
   font-weight: 500;
   margin-bottom: 24px;
-  color: #3f51b5;
+  color: #fcfcfc;
 }
 
 .loading-container {
@@ -47,4 +47,26 @@ app-movie-card img {
   max-width: 100%;
   object-fit: cover;
   border-radius: 8px;
+}
+
+::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-tab .mdc-tab-indicator {
+  --mdc-tab-indicator-active-indicator-color: #e50914;
+}
+
+::ng-deep .mat-mdc-tab:hover .mdc-tab__text-label {
+  color: #e50914 !important;
+}
+
+::ng-deep .mdc-tab__ripple::before,
+::ng-deep .mat-mdc-tab .mdc-tab__ripple::after {
+  background-color: #e50914;
+  opacity: 0.1;
+}
+
+::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #e50914 !important;
 }
