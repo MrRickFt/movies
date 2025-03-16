@@ -1,0 +1,48 @@
+<div class="login-container">
+    <div class="animated-background">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+        <div class="overlay"></div>
+    </div>
+
+    <div class="login-card">
+        <div class="login-content">
+            <div class="login-header">
+                <div class="logo-container">
+                    <mat-icon class="logo-icon">movie</mat-icon>
+                    <h1 class="app-title">MovieApp</h1>
+                </div>
+                <p class="app-subtitle">Tu experiencia cinematográfica personalizada</p>
+            </div>
+
+            <div class="form-container">
+                <h2>Iniciar sesión</h2>
+                <p class="login-description">Accede para disfrutar de contenido personalizado y guardar tus películas
+                    favoritas.</p>
+
+                <div class="login-providers">
+                    <button mat-raised-button color="accent" class="login-btn" (click)="loginWithGoogle()">
+                        <img src="assets/images/google-logo.svg" alt="Google" class="provider-icon">
+                        <span>Continuar con Google</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="login-footer">
+                <p>Al iniciar sesión, aceptas nuestros <a href="#">Términos de servicio</a> y <a href="#">Política de
+                        privacidad</a>.</p>
+            </div>
+        </div>
+
+        <div class="login-backdrop">
+            <div class="backdrop-gradient"></div>
+            <img src="assets/images/movie-backdrop.jpeg" alt="Movies backdrop" class="backdrop-image">
+            <div class="backdrop-content">
+                <h2>Miles de películas</h2>
+                <p>Tu portal a un mundo de entretenimiento sin límites</p>
+            </div>
+        </div>
+    </div>
+</div>

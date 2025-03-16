@@ -17,7 +17,7 @@
         </a>
       </div>
 
-      <div class="search-bar desktop-only">
+      <div *ngIf="user$ | async" class="search-bar desktop-only">
         <mat-form-field appearance="outline" class="search-input">
           <mat-label>Buscar películas...</mat-label>
           <input matInput #searchInput (keyup.enter)="searchMovies(searchInput.value)">
@@ -29,7 +29,7 @@
 
       <div class="spacer"></div>
 
-      <div class="mobile-actions" *ngIf="isMobile">
+      <div class="mobile-actions" *ngIf="isMobile && (user$ | async)">
         <button mat-icon-button *ngIf="!isSearchVisible" (click)="toggleSearch()" class="mobile-search-toggle">
           <mat-icon>search</mat-icon>
         </button>
@@ -109,14 +109,16 @@
           <mat-icon>favorite</mat-icon>
           <span>Favoritos</span>
         </a>
-        <a routerLink="/genres" routerLinkActive="active-link" (click)="isMenuOpen = false">
+
+        <!-- PROXIMAMENTE! -->
+        <!-- <a routerLink="/genres" routerLinkActive="active-link" (click)="isMenuOpen = false">
           <mat-icon>category</mat-icon>
           <span>Géneros</span>
         </a>
         <a routerLink="/new-releases" routerLinkActive="active-link" (click)="isMenuOpen = false">
           <mat-icon>new_releases</mat-icon>
           <span>Nuevos lanzamientos</span>
-        </a>
+        </a> -->
       </div>
 
       <div class="mobile-menu-footer" *ngIf="user$ | async">
