@@ -1,20 +1,12 @@
-
-<mat-toolbar color="primary" class="navbar">
+<header class="navbar-wrapper" [class.scroll-effect]="scrolled">
+  <mat-toolbar color="primary" class="navbar">
     <div class="navbar-container">
       <a routerLink="/movies" class="logo">
         <mat-icon>movie</mat-icon>
         <span class="app-name">MovieApp</span>
       </a>
-      
-      <div class="search-bar">
-        <mat-form-field appearance="outline" class="search-input">
-          <mat-label>Buscar películas...</mat-label>
-          <input matInput #searchInput (keyup.enter)="searchMovies(searchInput.value)">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-      </div>
-      
-      <div class="nav-links">
+
+      <div class="nav-links desktop-only">
         <a mat-button routerLink="/movies" routerLinkActive="active-link">
           <mat-icon>home</mat-icon>
           <span class="nav-text">Inicio</span>
@@ -24,11 +16,30 @@
           <span class="nav-text">Favoritos</span>
         </a>
       </div>
-      
+
+      <div class="search-bar desktop-only">
+        <mat-form-field appearance="outline" class="search-input">
+          <mat-label>Buscar películas...</mat-label>
+          <input matInput #searchInput (keyup.enter)="searchMovies(searchInput.value)">
+          <button mat-icon-button matSuffix (click)="searchMovies(searchInput.value)">
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
       <div class="spacer"></div>
-      
-      <ng-container *ngIf="user$ | async as user; else loginButton">
-        <button mat-button [matMenuTriggerFor]="userMenu" class="user-profile">
+
+      <div class="mobile-actions" *ngIf="isMobile">
+        <button mat-icon-button *ngIf="!isSearchVisible" (click)="toggleSearch()" class="mobile-search-toggle">
+          <mat-icon>search</mat-icon>
+        </button>
+        <button mat-icon-button (click)="toggleMenu()" class="menu-toggle">
+          <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+        </button>
+      </div>
+
+      <ng-container *ngIf="user$ | async as user" class="desktop-only">
+        <button mat-button [matMenuTriggerFor]="userMenu" class="user-profile desktop-only">
           <img [src]="user.photoURL || 'assets/images/avatar.png'" alt="Avatar" class="avatar">
           <span class="username">{{ user.displayName }}</span>
           <mat-icon>arrow_drop_down</mat-icon>
@@ -44,12 +55,76 @@
           </button>
         </mat-menu>
       </ng-container>
-      
-      <ng-template #loginButton>
-        <a mat-raised-button color="accent" routerLink="/login">
-          <mat-icon>login</mat-icon>
-          <span class="nav-text">Iniciar sesión</span>
-        </a>
-      </ng-template>
+
+      <a mat-raised-button color="accent" routerLink="/login" class="desktop-only" *ngIf="!(user$ | async)">
+        <mat-icon>login</mat-icon>
+        <span class="nav-text">Iniciar sesión</span>
+      </a>
     </div>
   </mat-toolbar>
+
+  <div class="mobile-search-container" *ngIf="isSearchVisible && isMobile">
+    <mat-form-field appearance="outline" class="mobile-search-input">
+      <mat-label>Buscar películas...</mat-label>
+      <input matInput #searchInput (keyup.enter)="searchMovies(searchInput.value)">
+      <button mat-icon-button matSuffix (click)="searchMovies(searchInput.value)">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+    <button mat-icon-button (click)="toggleSearch()" class="mobile-search-close">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="mobile-menu-backdrop" [class.active]="isMenuOpen" (click)="toggleMenu()"></div>
+  <div class="mobile-menu" [class.active]="isMenuOpen">
+    <div class="mobile-menu-content">
+      <ng-container *ngIf="user$ | async as user; else loginSection">
+        <div class="mobile-user-section">
+          <div class="mobile-user-info">
+            <img [src]="user.photoURL || 'assets/images/avatar.png'" alt="Avatar" class="mobile-avatar">
+            <div>
+              <div class="mobile-username">{{ user.displayName }}</div>
+              <div class="mobile-email">{{ user.email }}</div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #loginSection>
+        <div class="mobile-user-section">
+          <a mat-raised-button color="accent" routerLink="/login" class="full-width" (click)="isMenuOpen = false">
+            <mat-icon>login</mat-icon>
+            <span>Iniciar sesión</span>
+          </a>
+        </div>
+      </ng-template>
+
+      <div class="mobile-nav-links">
+        <a routerLink="/movies" routerLinkActive="active-link" (click)="isMenuOpen = false">
+          <mat-icon>home</mat-icon>
+          <span>Inicio</span>
+        </a>
+        <a routerLink="/favorites" routerLinkActive="active-link" (click)="isMenuOpen = false" *ngIf="user$ | async">
+          <mat-icon>favorite</mat-icon>
+          <span>Favoritos</span>
+        </a>
+        <a routerLink="/genres" routerLinkActive="active-link" (click)="isMenuOpen = false">
+          <mat-icon>category</mat-icon>
+          <span>Géneros</span>
+        </a>
+        <a routerLink="/new-releases" routerLinkActive="active-link" (click)="isMenuOpen = false">
+          <mat-icon>new_releases</mat-icon>
+          <span>Nuevos lanzamientos</span>
+        </a>
+      </div>
+
+      <div class="mobile-menu-footer" *ngIf="user$ | async">
+        <button mat-raised-button color="warn" class="full-width" (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Cerrar sesión</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>

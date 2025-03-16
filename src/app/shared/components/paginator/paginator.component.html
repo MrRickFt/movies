@@ -1,0 +1,19 @@
+<div class="paginator-container">
+    <mat-paginator 
+      [length]="length"
+      [pageSize]="pageSize"
+      [pageIndex]="pageIndex"
+      (page)="onPageChange($event)"
+      aria-label="Seleccionar página"
+      class="paginator">
+    </mat-paginator>
+    
+    <div class="paginator-status" *ngIf="totalPages > 0">
+      <span *ngIf="isFirstPage" class="paginator-limit-indicator first-page">
+        Primera página
+      </span>
+      <span *ngIf="isLastPage" class="paginator-limit-indicator last-page">
+        Última página
+      </span>
+    </div>
+  </div>

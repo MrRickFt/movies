@@ -14,12 +14,12 @@
             [movie]="movie"
           ></app-movie-card>
         </div>
-        <mat-paginator 
+        <app-custom-paginator
           [length]="popularTotalPages * 20"
           [pageSize]="20"
           [pageIndex]="popularCurrentPage - 1"
-          (page)="onPopularPageChange($event)">
-        </mat-paginator>
+          (pageChanged)="onPopularPageChange($event)">
+        </app-custom-paginator>
       </mat-tab>
       
       <mat-tab label="En Cartelera">
@@ -29,12 +29,12 @@
             [movie]="movie"
           ></app-movie-card>
         </div>
-        <mat-paginator 
+        <app-custom-paginator
           [length]="nowPlayingTotalPages * 20"
           [pageSize]="20"
           [pageIndex]="nowPlayingCurrentPage - 1"
-          (page)="onNowPlayingPageChange($event)">
-        </mat-paginator>
+          (pageChanged)="onNowPlayingPageChange($event)">
+        </app-custom-paginator>
       </mat-tab>
       
       <mat-tab label="Mejor Valoradas">
@@ -44,12 +44,12 @@
             [movie]="movie"
           ></app-movie-card>
         </div>
-        <mat-paginator 
+        <app-custom-paginator
           [length]="topRatedTotalPages * 20"
           [pageSize]="20"
           [pageIndex]="topRatedCurrentPage - 1"
-          (page)="onTopRatedPageChange($event)">
-        </mat-paginator>
+          (pageChanged)="onTopRatedPageChange($event)">
+        </app-custom-paginator>
       </mat-tab>
     </mat-tab-group>
   </div>

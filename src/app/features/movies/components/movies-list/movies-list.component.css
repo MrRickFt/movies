@@ -32,7 +32,6 @@
   }
 }
 
-/* Corrección para evitar el desbordamiento de imágenes */
 app-movie-card {
   display: flex;
   flex-direction: column;

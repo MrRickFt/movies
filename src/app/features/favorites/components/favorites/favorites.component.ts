@@ -6,11 +6,12 @@ import { FavoritesService } from '../../../../core/services/favorites.service';
 import { Movie } from '../../../../core/interfaces/movie';
 import { RouterModule } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
+import { CustomPaginatorComponent } from '../../../../shared/components/paginator/paginator.component';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [CommonModule, MaterialModule, MovieCardComponent, RouterModule],
+  imports: [CommonModule, MaterialModule, MovieCardComponent, RouterModule, CustomPaginatorComponent],
   templateUrl: './favorites.component.html',
   styleUrl: './favorites.component.css'
 })
@@ -86,5 +87,6 @@ export class FavoritesComponent implements OnInit {
   private updateDisplayedMovies(filteredMovies: Movie[]) {
     const startIndex = this.currentPage * this.pageSize;
     this.displayedMovies = filteredMovies.slice(startIndex, startIndex + this.pageSize);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

@@ -8,11 +8,12 @@ import { MaterialModule } from '../../../../shared/material.module';
 import { MovieCardComponent } from '../../../../shared/components/movie-card/movie-card.component';
 import { MovieFactoryService } from '../../../../core/factories/movie-factory';
 import { Movie } from '../../../../core/interfaces/movie';
+import { CustomPaginatorComponent } from '../../../../shared/components/paginator/paginator.component';
 
 @Component({
   selector: 'app-movie-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, MaterialModule, MovieCardComponent],
+  imports: [CommonModule, RouterModule, MaterialModule, MovieCardComponent, CustomPaginatorComponent],
   templateUrl: './movies-list.component.html',
   styleUrls: ['./movies-list.component.scss']
 })

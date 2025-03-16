@@ -18,13 +18,10 @@
     </app-movie-card>
   </div>
   
-
-  <mat-paginator *ngIf="!isLoading && totalMovies > 0"
-    [length]="totalMovies"
-    [pageSize]="pageSize"
-    [pageSizeOptions]="pageSizeOptions"
-    [pageIndex]="currentPage"
-    (page)="onPageChange($event)"
-    aria-label="Seleccionar página">
-  </mat-paginator>
+  <app-custom-paginator
+  [length]="totalMovies"
+  [pageSize]="20"
+  [pageIndex]="currentPage"
+  (pageChanged)="onPageChange($event)">
+</app-custom-paginator>
 </div>
